@@ -5,6 +5,15 @@ public class Photo {
     private int variant;
     private List<Integer>taskNumbers;
 
+    @Override
+    public String toString() {
+        return "Photo{" +
+                "fullPath='" + fullPath + '\'' +
+                ", variant=" + variant +
+                ", taskNumbers=" + taskNumbers +
+                '}';
+    }
+
     public Photo(String fullPath, int variant, List<Integer> taskNumbers) {
         this.fullPath = fullPath;
         this.variant = variant;

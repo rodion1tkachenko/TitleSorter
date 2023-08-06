@@ -6,12 +6,11 @@ import java.util.Scanner;
 public class OutputFolder implements DirectoryActions {
     @Override
     public Path getDirectory() {
-        System.out.print("Enter output directory path -> ");
+        System.out.print("Enter the directory where the photos will be sorted -> ");
         String inputStringPath;
         boolean pathIsValid=false;
-        try(Scanner scanner=new Scanner(System.in)){
             while(!pathIsValid) {
-                inputStringPath = scanner.nextLine();
+                inputStringPath = ServerLogic.scanner.nextLine();
                 if(isDirectory(inputStringPath)){
                     return Paths.get(inputStringPath);
                 }
@@ -19,7 +18,7 @@ public class OutputFolder implements DirectoryActions {
                     System.out.print("You entered not a output directory. Please try again -> ");
                 }
             }
-        }
+
         return null;
     }
 

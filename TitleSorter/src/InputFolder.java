@@ -9,9 +9,8 @@ public class InputFolder implements DirectoryActions {
         System.out.print("Enter input directory's path -> ");
         String inputStringPath;
         boolean pathIsValid=false;
-        try(Scanner scanner=new Scanner(System.in)){
             while(!pathIsValid) {
-                inputStringPath = scanner.nextLine();
+                inputStringPath = ServerLogic.scanner.nextLine();
                 if(isDirectory( inputStringPath)){
                     return Paths.get(inputStringPath);
                 }
@@ -19,7 +18,6 @@ public class InputFolder implements DirectoryActions {
                     System.out.print("You entered not a directory. Please try again -> ");
                 }
             }
-        }
         return null;
     }
     @Override

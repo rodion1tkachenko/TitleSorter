@@ -25,21 +25,39 @@ public class ServerLogic {
             int variant=getVariant(splitedString);
             allPhotos.add(new Photo(fullName,variant, getNumbers(splitedString)));
         }
-        allPhotos.forEach(System.out::println);
+
     }
     public void sendToTheDesiredFolders(){
-
         makeDirectories(outputFolder.getDirectory());
+        moveFiles();
+        
+    }
+    private void moveFiles(){
+        for (int i = 0; i <allPhotos.size(); i++) {
+            Path oldPathFile= Paths.get(allPhotos.get(i).getFullPath());
+            StringBuilder newPathFile=new StringBuilder(outputFolder.getPath()+"");
+            newPathFile.append("\\Вариант "+(allPhotos.get(i).getVariant()));
+            try {
+                for (int j = 0; j < allPhotos.get(i).getTaskNumbers().size(); j++) {
+                    Path newPath=Paths.get(newPathFile+"\\Номер "+ allPhotos.get(i).getTaskNumbers().get(j));
+                    Files.copy(newPath,oldPathFile);
+                }
+            } catch (IOException e) {
+                e.getStackTrace();
+            }
+//            Path newPathFile=Paths.get
+
+        }
     }
     private void makeDirectories(Path path){
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < Helper.findOutAmountOfVariants(); i++) {
             try {
                 String dirFullName=path.toString()+"\\Вариант "+(i+1);
                 if(!new File(dirFullName).exists()) {
                     Files.createDirectory(Paths.get(dirFullName));
                 }
-                for (int j = 0; j < 5; j++) {
-                    System.out.println(dirFullName+"\\Номер "+(j+1));
+                for (int j = 0; j < Helper.findOutAmountOfNumbers(); j++) {
+                    Files.createDirectory(Paths.get(dirFullName+"\\Номер "+(j+1)));
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -68,9 +86,7 @@ public class ServerLogic {
         }
         return result;
     }
-    public void getOutputDirectory(){
-
-    }
+ 
     public static List<Photo> getAllPhotos() {
         return allPhotos;
     }

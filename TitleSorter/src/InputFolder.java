@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class InputFolder implements DirectoryActions {
+    private Path path;
     @Override
     public Path getDirectory(){
         System.out.print("Enter input directory's path -> ");
@@ -12,7 +13,8 @@ public class InputFolder implements DirectoryActions {
             while(!pathIsValid) {
                 inputStringPath = ServerLogic.scanner.nextLine();
                 if(isDirectory( inputStringPath)){
-                    return Paths.get(inputStringPath);
+                    path =Paths.get(inputStringPath);
+                    return path;
                 }
                 else {
                     System.out.print("You entered not a directory. Please try again -> ");
@@ -24,5 +26,9 @@ public class InputFolder implements DirectoryActions {
     public boolean isDirectory(String userString){
         Path inputpath= Paths.get(userString);
         return Files.isDirectory(inputpath);
+    }
+
+    public Path getPath() {
+        return path;
     }
 }

@@ -10,4 +10,14 @@ public class Helper {
         }
         return lastNumber;
     }
+    public static int findOutAmountOfVariants() {
+        int maxVariant=1;
+        for (int i = 0; i < ServerLogic.getAllPhotos().size(); i++) {
+            int currentVariant=ServerLogic.getAllPhotos().get(i).getVariant();
+            if(currentVariant>maxVariant){
+                maxVariant=currentVariant;
+            }
+        }
+        return maxVariant;
+    }
 }

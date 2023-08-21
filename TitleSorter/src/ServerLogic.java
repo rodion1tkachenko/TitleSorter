@@ -33,21 +33,20 @@ public class ServerLogic {
         
     }
     private void moveFiles(){
-        for (int i = 0; i <allPhotos.size(); i++) {
-            Path oldPathFile= Paths.get(allPhotos.get(i).getFullPath());
-            StringBuilder newPathFile=new StringBuilder(outputFolder.getPath()+"");
-            newPathFile.append("\\Вариант "+(allPhotos.get(i).getVariant()));
-            try {
-                for (int j = 0; j < allPhotos.get(i).getTaskNumbers().size(); j++) {
-                    Path newPath=Paths.get(newPathFile+"\\Номер "+ allPhotos.get(i).getTaskNumbers().get(j));
-                    Files.copy(newPath,oldPathFile);
-                }
-            } catch (IOException e) {
-                e.getStackTrace();
+        for(Photo photo: allPhotos){
+            for(int number: photo.getTaskNumbers()){
+                System.out.println(makeNewPath(photo, number));
             }
-//            Path newPathFile=Paths.get
-
         }
+    }
+    private String makeNewPath(Photo photo,int number){
+        StringBuilder builder=new StringBuilder(outputFolder.getPath().toString());
+        builder.append("\\Вариант ");
+        builder.append(photo.getVariant());
+        builder.append("\\Номер ");
+        builder.append(number);
+        builder.append(("\\"+photo.getFullPath()));
+        return builder.toString();
     }
     private void makeDirectories(Path path){
         for (int i = 0; i < Helper.findOutAmountOfVariants(); i++) {

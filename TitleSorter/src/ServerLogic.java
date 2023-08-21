@@ -38,6 +38,7 @@ public class ServerLogic {
                 System.out.println(makeNewPath(photo, number));
             }
         }
+        //123
     }
     private String makeNewPath(Photo photo,int number){
         StringBuilder builder=new StringBuilder(outputFolder.getPath().toString());

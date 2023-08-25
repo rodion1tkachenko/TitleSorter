@@ -15,6 +15,7 @@ public class ServerLogic {
      OutputFolder outputFolder=new OutputFolder();
      static Scanner scanner=new Scanner(System.in);
     public  void scanPhotos(Path path){
+        //плохо работает с файлами с неправильным форматом( т.е. папки выдают ошибки)
         File[]files=path.toFile().listFiles();
         allFiles =new ArrayList<>();
         allPhotos=new ArrayList<>();
@@ -23,7 +24,7 @@ public class ServerLogic {
             String fullName= allFiles.get(i).getName();
             String[]splitedString=fullName.split(" ");
             int variant=getVariant(splitedString);
-            allPhotos.add(new Photo(fullName,variant, getNumbers(splitedString)));
+            allPhotos.add(new Photo(Paths.get( allFiles.get(i).getAbsolutePath()),fullName,variant, getNumbers(splitedString)));
         }
 
     }
@@ -33,10 +34,15 @@ public class ServerLogic {
         
     }
     private void moveFiles(){
-        for(Photo photo: allPhotos){
-            for(int number: photo.getTaskNumbers()){
-                System.out.println(makeNewPath(photo, number));
+        try {
+            for(Photo photo: allPhotos){
+                for(int number: photo.getTaskNumbers()){
+                    Files.copy(photo.getAbsolutePath(),Paths.get(makeNewPath(photo, number)));
+                    System.out.println(makeNewPath(photo, number));
+                }
             }
+        } catch (IOException e) {
+            e.getStackTrace();
         }
         //123
     }
@@ -57,7 +63,9 @@ public class ServerLogic {
                     Files.createDirectory(Paths.get(dirFullName));
                 }
                 for (int j = 0; j < Helper.findOutAmountOfNumbers(); j++) {
-                    Files.createDirectory(Paths.get(dirFullName+"\\Номер "+(j+1)));
+                    if(!new File(dirFullName+"\\Номер "+(j+1)).exists()) {
+                        Files.createDirectory(Paths.get(dirFullName + "\\Номер " + (j + 1)));
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

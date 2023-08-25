@@ -9,53 +9,35 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ServerLogic {
-
     private static List<Photo>allPhotos;
-     private InputFolder inputFolder=new InputFolder();
-     private OutputFolder outputFolder=new OutputFolder();
-     static Scanner scanner=new Scanner(System.in);
+    private InputFolder inputFolder=new InputFolder();
+    private OutputFolder outputFolder=new OutputFolder();
+    static Scanner scanner=new Scanner(System.in);
+    public void run(){
+        scanPhotos(getInputFolder().getDirectory());
+        sendToTheDesiredFolders();
+    }
+
     public  void scanPhotos(Path path){
-        //плохо работает с файлами с неправильным форматом( т.е. папки выдают ошибки)
         File[]files=path.toFile().listFiles();
         allPhotos=new ArrayList<>();
-        for(File oneFile:files){
-            if(Files.isDirectory(oneFile.toPath())){
+        for(File oneFile:files) {
+            if (Files.isDirectory(oneFile.toPath())) {
                 continue;
             }
-            String fullName= oneFile.getName();
-            String[]splitedString=fullName.split(" ");
-            int variant=getVariant(splitedString);
-            allPhotos.add(new Photo(Paths.get(oneFile.getAbsolutePath()),
-                    fullName,variant, getNumbers(splitedString)));
+            String extension = Helper.getFileExtension(oneFile);
+            if (extension.equals("jpg") || extension.equals("jpeg")) {
+                String fullName = oneFile.getName();
+                int variant = getVariant(fullName);
+                List<Integer> numbers = getNumbers(fullName);
+                allPhotos.add(new Photo(Paths.get(oneFile.getAbsolutePath()),
+                        fullName, variant, numbers));
+            }
         }
-
-
     }
     public void sendToTheDesiredFolders(){
         makeDirectories(outputFolder.getDirectory());
         moveFiles();
-        
-    }
-    private void moveFiles(){
-        try {
-            for(Photo photo: allPhotos){
-                for(int number: photo.getTaskNumbers()){
-                    Files.copy(photo.getAbsolutePath(),Paths.get(makeNewPath(photo, number)));
-                }
-            }
-        } catch (IOException e) {
-            e.getStackTrace();
-        }
-        //123
-    }
-    private String makeNewPath(Photo photo,int number){
-        StringBuilder builder=new StringBuilder(outputFolder.getPath().toString());
-        builder.append("\\Вариант ");
-        builder.append(photo.getVariant());
-        builder.append("\\Номер ");
-        builder.append(number);
-        builder.append(("\\"+photo.getFileName()));
-        return builder.toString();
     }
     private void makeDirectories(Path path){
         for (int i = 0; i < Helper.findOutAmountOfVariants(); i++) {
@@ -74,16 +56,59 @@ public class ServerLogic {
             }
         }
     }
-    private int getVariant(String[] splitedString){
-        String stringVariant=splitedString[0].substring(splitedString[0].indexOf("в")+1);
-        return Integer.parseInt(stringVariant);
+    private void moveFiles(){
+        try {
+            for(Photo photo: getAllPhotos()){
+                for(int number: photo.getTaskNumbers()){
+                    Files.copy(photo.getAbsolutePath(),makeNewPath(photo, number));
+                }
+            }
+        } catch (IOException e) {
+            e.getStackTrace();
+        }
+        //123
+    }
+
+    private Path makeNewPath(Photo photo,int number){
+        StringBuilder builder=new StringBuilder(outputFolder.getPath().toString());
+        builder.append("\\Вариант ");
+        builder.append(photo.getVariant());
+        builder.append("\\Номер ");
+        builder.append(number);
+        builder.append(("\\"+photo.getFileName()));
+        return Paths.get( builder.toString());
+    }
+
+
+    private int getVariant(String inputString){
+        String result=inputString.substring(inputString.indexOf("в")+1,inputString.indexOf(' '));
+        return Integer.parseInt(result);
     }
     private ArrayList<Integer> getNumbers(String[] splitedString){
-        String neccesaryString=splitedString[1];
-        String substringWithBrackets=neccesaryString.substring(0,neccesaryString.indexOf('.'));
-        /*выдает баг при строке где больше 1 пробела!!*/
+        String substringWithBrackets= null;
+            String neccesaryString=splitedString[1];
+            if(neccesaryString.contains(".")){
+                substringWithBrackets = neccesaryString.substring(0,neccesaryString.indexOf('.'));
+            }
+            else{
+                substringWithBrackets=splitedString[1];
+            }
         return getNumbersFromStringWithBrackets(substringWithBrackets);
     }
+    private ArrayList<Integer> getNumbers(String string) {
+        String[]splitedString=string.split(" ");
+        String substringWithBrackets;
+        String neccesaryString=splitedString[1];
+        if(neccesaryString.contains(".")){
+            substringWithBrackets = neccesaryString.substring(0,neccesaryString.indexOf('.'));
+        }
+        else{
+            substringWithBrackets=splitedString[1];
+        }
+        return getNumbersFromStringWithBrackets(substringWithBrackets);
+
+    }
+
     private ArrayList<Integer> getNumbersFromStringWithBrackets(String bracketsString){
         ArrayList<Integer>result=new ArrayList<>();
         try {

@@ -3,7 +3,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-public class InputFolder implements DirectoryActions {
+public class InputFolder implements DirectoryActions{
     private Path path;
     @Override
     public Path getDirectory(){

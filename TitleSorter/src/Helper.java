@@ -1,3 +1,6 @@
+import java.io.File;
+import java.util.List;
+
 public class Helper {
     public static int findOutAmountOfNumbers(){
         int lastNumber=1;
@@ -19,5 +22,18 @@ public class Helper {
             }
         }
         return maxVariant;
+    }
+    public static String getFileExtension(File file) {
+        String fileName = file.getName();
+        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+
+            return fileName.substring(fileName.lastIndexOf(".")+1);
+
+        else return "";
+    }
+    public static void printAllPhotos(List list){
+        for(Object object:list){
+            System.out.println(object);
+        }
     }
 }

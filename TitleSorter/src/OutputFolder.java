@@ -12,11 +12,13 @@ public class OutputFolder implements DirectoryActions {
 
     @Override
     public Path getDirectory() {
-        System.out.print("Enter the directory where the photos will be sorted -> ");
-        String inputStringPath;
-        boolean pathIsValid=false;
+            System.out.print("Enter the directory where the photos will be sorted -> ");
+            String inputStringPath;
+            boolean pathIsValid=false;
             while(!pathIsValid) {
-                inputStringPath = ServerLogic.scanner.nextLine();
+
+                    inputStringPath = ServerLogic.scanner.nextLine();
+
                 if(isDirectory(inputStringPath)){
                     path=Paths.get(inputStringPath);
                     return path;
@@ -24,7 +26,10 @@ public class OutputFolder implements DirectoryActions {
                 else {
                     System.out.print("You entered not a output directory. Please try again -> ");
                 }
-            }
+                ServerLogic.scanner.close();
+
+        }
+
 
         return null;
     }

@@ -19,6 +19,9 @@ public class ServerLogic {
         File[]files=path.toFile().listFiles();
         allPhotos=new ArrayList<>();
         for(File oneFile:files){
+            if(Files.isDirectory(oneFile.toPath())){
+                continue;
+            }
             String fullName= oneFile.getName();
             String[]splitedString=fullName.split(" ");
             int variant=getVariant(splitedString);

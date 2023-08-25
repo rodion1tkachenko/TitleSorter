@@ -9,23 +9,23 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ServerLogic {
-    private  List<File> allFiles;
+
     private static List<Photo>allPhotos;
-     InputFolder inputFolder=new InputFolder();
-     OutputFolder outputFolder=new OutputFolder();
+     private InputFolder inputFolder=new InputFolder();
+     private OutputFolder outputFolder=new OutputFolder();
      static Scanner scanner=new Scanner(System.in);
     public  void scanPhotos(Path path){
         //плохо работает с файлами с неправильным форматом( т.е. папки выдают ошибки)
         File[]files=path.toFile().listFiles();
-        allFiles =new ArrayList<>();
         allPhotos=new ArrayList<>();
-        allFiles.addAll(Arrays.asList(files));
-        for (int i = 0; i < allFiles.size(); i++) {
-            String fullName= allFiles.get(i).getName();
+        for(File oneFile:files){
+            String fullName= oneFile.getName();
             String[]splitedString=fullName.split(" ");
             int variant=getVariant(splitedString);
-            allPhotos.add(new Photo(Paths.get( allFiles.get(i).getAbsolutePath()),fullName,variant, getNumbers(splitedString)));
+            allPhotos.add(new Photo(Paths.get(oneFile.getAbsolutePath()),
+                    fullName,variant, getNumbers(splitedString)));
         }
+
 
     }
     public void sendToTheDesiredFolders(){
@@ -38,7 +38,6 @@ public class ServerLogic {
             for(Photo photo: allPhotos){
                 for(int number: photo.getTaskNumbers()){
                     Files.copy(photo.getAbsolutePath(),Paths.get(makeNewPath(photo, number)));
-                    System.out.println(makeNewPath(photo, number));
                 }
             }
         } catch (IOException e) {
@@ -52,7 +51,7 @@ public class ServerLogic {
         builder.append(photo.getVariant());
         builder.append("\\Номер ");
         builder.append(number);
-        builder.append(("\\"+photo.getFullPath()));
+        builder.append(("\\"+photo.getFileName()));
         return builder.toString();
     }
     private void makeDirectories(Path path){
@@ -97,5 +96,13 @@ public class ServerLogic {
  
     public static List<Photo> getAllPhotos() {
         return allPhotos;
+    }
+
+    public InputFolder getInputFolder() {
+        return inputFolder;
+    }
+
+    public OutputFolder getOutputFolder() {
+        return outputFolder;
     }
 }

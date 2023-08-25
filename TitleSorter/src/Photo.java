@@ -3,14 +3,15 @@ import java.util.List;
 
 public class Photo {
     private Path absolutePath;
-    private String fullPath;
+    private String fileName;
     private int variant;
     private List<Integer>taskNumbers;
 
     @Override
     public String toString() {
         return "Photo{" +
-                "fullPath='" + fullPath + '\'' +
+                "absolutePath=" + absolutePath +
+                ", fileName='" + fileName + '\'' +
                 ", variant=" + variant +
                 ", taskNumbers=" + taskNumbers +
                 '}';
@@ -18,19 +19,19 @@ public class Photo {
 
     public Photo(Path absolutePath, String fullPath, int variant, List<Integer> taskNumbers) {
         this.absolutePath = absolutePath;
-        this.fullPath = fullPath;
+        this.fileName = fullPath;
         this.variant = variant;
         this.taskNumbers = taskNumbers;
     }
 
     public Photo(String fullPath, int variant, List<Integer> taskNumbers) {
-        this.fullPath = fullPath;
+        this.fileName = fullPath;
         this.variant = variant;
         this.taskNumbers = taskNumbers;
     }
 
-    public String getFullPath() {
-        return fullPath;
+    public String getFileName() {
+        return fileName;
     }
 
     public int getVariant() {

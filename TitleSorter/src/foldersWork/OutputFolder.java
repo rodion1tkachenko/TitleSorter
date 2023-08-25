@@ -1,14 +1,9 @@
-import java.nio.file.Files;
+package foldersWork;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
-public class OutputFolder implements DirectoryActions {
-    private Path path;
-
-    public Path getPath() {
-        return path;
-    }
+public class OutputFolder extends AbstractFolder {
 
     @Override
     public Path getDirectory() {
@@ -16,8 +11,7 @@ public class OutputFolder implements DirectoryActions {
             String inputStringPath;
             boolean pathIsValid=false;
             while(!pathIsValid) {
-
-                    inputStringPath = ServerLogic.scanner.nextLine();
+                    inputStringPath = scanner.nextLine();
 
                 if(isDirectory(inputStringPath)){
                     path=Paths.get(inputStringPath);
@@ -26,17 +20,10 @@ public class OutputFolder implements DirectoryActions {
                 else {
                     System.out.print("You entered not a output directory. Please try again -> ");
                 }
-                ServerLogic.scanner.close();
+                scanner.close();
 
         }
-
-
         return null;
     }
 
-    public  boolean isDirectory(String userString){
-        Path inputpath= Paths.get(userString);
-        return Files.isDirectory(inputpath);
-
-    }
 }

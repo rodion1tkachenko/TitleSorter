@@ -1,0 +1,12 @@
+entity\Photo.class
+foldersWork\InputFolder.class
+UserInterface.class
+dao\PhotoDao.class
+util\PropertiesUtil.class
+util\Helper.class
+runner\Test.class
+service\ServerLogic.class
+util\ConnectionManager.class
+foldersWork\AbstractFolder.class
+dao\Dao.class
+foldersWork\OutputFolder.class

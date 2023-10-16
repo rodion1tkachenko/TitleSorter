@@ -17,7 +17,7 @@ public class PhotoDao {
       return INSTANCE;
    }
    private static final  String SAVE_SQL= """
-           insert into photos
+           insert into %s /*photos*/
            (variant, numbers, fileName)
            values (?,?,?);
            """;
@@ -35,8 +35,8 @@ public class PhotoDao {
 """;
    public void checkConnection(){
 
-      try ( Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(PRINT_ALL_PHOTO_FIELDS_SQL)) {
+      try (Connection connection = ConnectionManager.get();
+           PreparedStatement statement = connection.prepareStatement(PRINT_ALL_PHOTO_FIELDS_SQL)) {
          ResultSet resultSet = statement.executeQuery();
          while(resultSet.next()){
             System.out.print("id: "+resultSet.getString("id")+" ");
@@ -48,18 +48,18 @@ public class PhotoDao {
           throw new RuntimeException(e);
       }
    }
-   public void save(Photo photo){
+   public void save(Photo photo,String tableTitle){
       try (Connection connection = ConnectionManager.get();
-      PreparedStatement preparedStatement= connection.prepareStatement(SAVE_SQL)) {
+           PreparedStatement preparedStatement= connection.prepareStatement(SAVE_SQL.formatted(tableTitle))) {
          setData(photo, preparedStatement);
-         int executeUpdate = preparedStatement.executeUpdate();
+         preparedStatement.executeUpdate();
       } catch (SQLException e) {
           throw new RuntimeException(e);
       }
    }
    public  final void delete(Integer id){
       try (Connection connection = ConnectionManager.get();
-      PreparedStatement preparedStatement= connection.prepareStatement(DELETE_SQL)) {
+           PreparedStatement preparedStatement= connection.prepareStatement(DELETE_SQL)) {
          preparedStatement.setInt(1,id);
          preparedStatement.executeUpdate();
       } catch (SQLException e) {
@@ -75,7 +75,7 @@ public class PhotoDao {
    }
    private boolean isContain(Photo photo){
       try (Connection connection = ConnectionManager.get();
-      PreparedStatement preparedStatement= connection.prepareStatement(FIND_BY_FILENAME_SQL)) {
+           PreparedStatement preparedStatement= connection.prepareStatement(FIND_BY_FILENAME_SQL)) {
          preparedStatement.setString(1, photo.getFileName());
          ResultSet resultSet = preparedStatement.executeQuery();
          if(resultSet.next()){

@@ -12,57 +12,40 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
 import entity.Photo;
+import util.Statistic;
+import util.TableAction;
 
 public class ServerLogic {
     private static List<Photo>allPhotos;
     private Path inputDirectory;
     private Path outputDirectory;
-//    private InputFolder inputFolder=new InputFolder();
-//    private OutputFolder outputFolder=new OutputFolder();
-    private  String examTitle ;
+    private String examTitle ;
 
     public void run(){
         getDirectories();
         scanPhotos();
-//        scanPhotos(inputFolder.getDirectory());
-    //    savePhotoAtDatabase();
-//    sendToTheDesiredFolders();
+//        savePhotoAtDatabase();
+//        sendToTheDesiredFolders();
+        new Statistic().getStatistic(allPhotos,outputDirectory);
     }
-
-    private void getDirectories() {
+    //private*
+    public void getDirectories() {
         examTitle= new ExamName().getDirectory().toString();
         inputDirectory= new InputFolder().getDirectory();
         outputDirectory=new OutputFolder().getDirectory();
     }
-
-
     private void savePhotoAtDatabase() {
+        TableAction.INSTANCE.create(createTableName());
+        PhotoDao photoDao = PhotoDao.getInstance();
         for(Photo photo: allPhotos){
-            PhotoDao photoDao = PhotoDao.getInstance();
-            photoDao.save(photo);
+            photoDao.save(photo,examTitle);
         }
     }
+    String createTableName(){
+        return examTitle.replaceAll("[ -]","_");
+    }
 
-//    public  void scanPhotos(Path path){
-//        File[]files=path.toFile().listFiles();
-//        allPhotos=new ArrayList<>();
-//        for(File oneFile:files) {
-//            if (Files.isDirectory(oneFile.toPath())) {
-//                continue;
-//            }
-//            String extension = Helper.getFileExtension(oneFile);
-//            if (extension.equals("jpg") || extension.equals("jpeg")) {
-//                String fullName = oneFile.getName();
-//                int variant = getVariant(fullName);
-//                List<Integer> numbers = getNumbers(fullName);
-//                allPhotos.add(new Photo(Paths.get(oneFile.getAbsolutePath()),
-//                        fullName, variant, numbers));
-//            }
-//        }
-//    }
     public  void scanPhotos(){
         File[]files=inputDirectory.toFile().listFiles();
         allPhotos=new ArrayList<>();
@@ -81,13 +64,20 @@ public class ServerLogic {
         }
     }
     public void sendToTheDesiredFolders(){
-        makeDirectories(outputFolder.getDirectory());
+        makeDirectories();
         moveFiles();
     }
-        private Path makeDirWithExamName(Path path){
-        return Paths.get( outputFolder.getDirectory().toString()+"\\" +examTitle);
+        private Path makeDirWithExamName(){
+        return Paths.get( outputDirectory.toString()+"\\" +examTitle);
     }
-    private void makeDirectories(Path path){
+
+    private void makeDirectories(){
+        Path path=makeDirWithExamName();
+        try {
+            Files.createDirectory(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         for (int i = 0; i < Helper.findOutAmountOfVariants(); i++) {
             try {
                 String dirFullName=path.toString()+"\\Вариант "+(i+1);
@@ -114,11 +104,10 @@ public class ServerLogic {
         } catch (IOException e) {
             e.getStackTrace();
         }
-        //123
     }
 
     private Path makeNewPath(Photo photo, int number){
-        StringBuilder builder=new StringBuilder(outputFolder.getPath().toString());
+        StringBuilder builder=new StringBuilder(makeDirWithExamName().toString());
         builder.append("\\Вариант ");
         builder.append(photo.getVariant());
         builder.append("\\Номер ");
@@ -131,17 +120,6 @@ public class ServerLogic {
     private int getVariant(String inputString){
         String result=inputString.substring(inputString.indexOf("в")+1,inputString.indexOf(' '));
         return Integer.parseInt(result);
-    }
-    private ArrayList<Integer> getNumbers(String[] splitedString){
-        String substringWithBrackets= null;
-            String neccesaryString=splitedString[1];
-            if(neccesaryString.contains(".")){
-                substringWithBrackets = neccesaryString.substring(0,neccesaryString.indexOf('.'));
-            }
-            else{
-                substringWithBrackets=splitedString[1];
-            }
-        return getNumbersFromStringWithBrackets(substringWithBrackets);
     }
     private ArrayList<Integer> getNumbers(String string) {
         String[]splitedString=string.split(" ");
@@ -174,11 +152,7 @@ public class ServerLogic {
         return allPhotos;
     }
 
-    public InputFolder getInputFolder() {
-        return inputFolder;
-    }
-
-    public OutputFolder getOutputFolder() {
-        return outputFolder;
+    public String getExamTitle() {
+        return examTitle;
     }
 }

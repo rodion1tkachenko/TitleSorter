@@ -13,7 +13,7 @@ import java.util.*;
 public class Statistic {
     HashMap<Integer, HashSet<Integer>>map=new HashMap<>();
     public void getStatistic(List<Photo> photoList, Path path) {
-        for (int i=0;i<Helper.findOutAmountOfVariants();i++){
+        for (int i=0;i<Helper.findOutAmountOfVariants(photoList);i++){
             map.put(i+1,new HashSet<>());
         }
         for(Photo photo:photoList){
@@ -26,7 +26,7 @@ public class Statistic {
 
     private void getUnluckyVariants(Path path) {
         ArrayList<Integer> hardestVariants=new ArrayList();
-        int minTaskNumbers=Helper.findOutAmountOfNumbers();
+        int minTaskNumbers=Integer.MAX_VALUE;
         for (Map.Entry<Integer,HashSet<Integer>> entry : map.entrySet()) {
             if(entry.getValue().size()<minTaskNumbers){
                 minTaskNumbers=entry.getValue().size();

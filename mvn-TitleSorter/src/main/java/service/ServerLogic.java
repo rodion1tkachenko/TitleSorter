@@ -17,7 +17,7 @@ import util.Statistic;
 import util.TableAction;
 
 public class ServerLogic {
-    private static List<Photo>allPhotos;
+    private List<Photo>allPhotos;
     private Path inputDirectory;
     private Path outputDirectory;
     private String examTitle ;
@@ -25,8 +25,8 @@ public class ServerLogic {
     public void run(){
         getDirectories();
         scanPhotos();
-//        savePhotoAtDatabase();
-//        sendToTheDesiredFolders();
+        savePhotoAtDatabase();
+        sendToTheDesiredFolders();
         new Statistic().getStatistic(allPhotos,outputDirectory);
     }
     //private*
@@ -78,13 +78,13 @@ public class ServerLogic {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        for (int i = 0; i < Helper.findOutAmountOfVariants(); i++) {
+        for (int i = 0; i < Helper.findOutAmountOfVariants(allPhotos); i++) {
             try {
                 String dirFullName=path.toString()+"\\Вариант "+(i+1);
                 if(!new File(dirFullName).exists()) {
                     Files.createDirectory(Paths.get(dirFullName));
                 }
-                for (int j = 0; j < Helper.findOutAmountOfNumbers(); j++) {
+                for (int j = 0; j < Helper.findOutAmountOfNumbers(allPhotos); j++) {
                     if(!new File(dirFullName+"\\Номер "+(j+1)).exists()) {
                         Files.createDirectory(Paths.get(dirFullName + "\\Номер " + (j + 1)));
                     }
@@ -147,8 +147,8 @@ public class ServerLogic {
         }
         return result;
     }
- 
-    public static List<Photo> getAllPhotos() {
+
+    public  List<Photo> getAllPhotos() {
         return allPhotos;
     }
 

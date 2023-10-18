@@ -17,7 +17,7 @@ public class PhotoDao {
       return INSTANCE;
    }
    private static final  String SAVE_SQL= """
-           insert into %s /*photos*/
+           insert into %s 
            (variant, numbers, fileName)
            values (?,?,?);
            """;

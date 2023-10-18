@@ -3,24 +3,25 @@ package util;
 import java.io.File;
 import java.util.List;
 
+import entity.Photo;
 import service.ServerLogic;
 
 public class Helper {
-    public static int findOutAmountOfNumbers(){
+    public static int findOutAmountOfNumbers(List<Photo>photos){
         int lastNumber=1;
-        for (int i = 0; i < ServerLogic.getAllPhotos().size(); i++) {
-            for (int j = 0; j < ServerLogic.getAllPhotos().get(i).getTaskNumbers().size(); j++) {
-                if(ServerLogic.getAllPhotos().get(i).getTaskNumbers().get(j)>lastNumber){
-                    lastNumber= ServerLogic.getAllPhotos().get(i).getTaskNumbers().get(j);
+        for (int i = 0; i < photos.size(); i++) {
+            for (int j = 0; j < photos.get(i).getTaskNumbers().size(); j++) {
+                if(photos.get(i).getTaskNumbers().get(j)>lastNumber){
+                    lastNumber= photos.get(i).getTaskNumbers().get(j);
                 }
             }
         }
         return lastNumber;
     }
-    public static int findOutAmountOfVariants() {
+    public static int findOutAmountOfVariants(List<Photo>photos) {
         int maxVariant=1;
-        for (int i = 0; i < ServerLogic.getAllPhotos().size(); i++) {
-            int currentVariant= ServerLogic.getAllPhotos().get(i).getVariant();
+        for (int i = 0; i < photos.size(); i++) {
+            int currentVariant= photos.get(i).getVariant();
             if(currentVariant>maxVariant){
                 maxVariant=currentVariant;
             }

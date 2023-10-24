@@ -12,6 +12,7 @@ public class ExamName extends AbstractFolder {
     public Path getDirectory() {
         System.out.print("Enter exam's name -> ");
 
+
         boolean isNameFound=false;
         while(!isNameFound){
             if (scanner.hasNextLine()) {
@@ -31,7 +32,5 @@ public class ExamName extends AbstractFolder {
             }
         }
         return path;
-
-
     }
 }

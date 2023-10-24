@@ -1,5 +1,7 @@
 package util;
 
+import exception.NotValidTableNameException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -21,21 +23,24 @@ public class TableAction {
     private static final String DROP_TABLE_SQL= """
             drop table if exists %s
             """;
-    public void create(String title){
+    public boolean create(String title){
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement= connection.prepareStatement(CREATE_TABLE_SQL.formatted(title))) {
             preparedStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new NotValidTableNameException();
         }
     }
-    public void drop(String title){
+    public boolean drop(String title){
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement= connection.prepareStatement(DROP_TABLE_SQL.formatted(title))) {
             preparedStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new NotValidTableNameException();
         }
+
 
     }
 }

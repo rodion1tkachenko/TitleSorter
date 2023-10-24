@@ -1,5 +1,4 @@
 package service;
-
 import dao.PhotoDao;
 import foldersWork.ExamName;
 import foldersWork.InputFolder;
@@ -11,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import entity.Photo;
 import util.Statistic;
@@ -21,13 +22,14 @@ public class ServerLogic {
     private Path inputDirectory;
     private Path outputDirectory;
     private String examTitle ;
-
     public void run(){
         getDirectories();
         scanPhotos();
         savePhotoAtDatabase();
         sendToTheDesiredFolders();
-        new Statistic().getStatistic(allPhotos,outputDirectory);
+        HashMap<Integer, HashSet<Integer>> statistic = Statistic.getStatistic(allPhotos, outputDirectory);
+        Statistic.getLuckyVariants(statistic,outputDirectory);
+        Statistic.getUnluckyVariants(statistic,outputDirectory);
     }
     //private*
     public void getDirectories() {
@@ -39,14 +41,14 @@ public class ServerLogic {
         TableAction.INSTANCE.create(createTableName());
         PhotoDao photoDao = PhotoDao.getInstance();
         for(Photo photo: allPhotos){
-            photoDao.save(photo,examTitle);
+            photoDao.save(photo,createTableName());
         }
     }
     String createTableName(){
         return examTitle.replaceAll("[ -]","_");
     }
 
-    public  void scanPhotos(){
+    public void scanPhotos(){
         File[]files=inputDirectory.toFile().listFiles();
         allPhotos=new ArrayList<>();
         for(File oneFile:files) {
@@ -67,7 +69,7 @@ public class ServerLogic {
         makeDirectories();
         moveFiles();
     }
-        private Path makeDirWithExamName(){
+    private Path makeDirWithExamName(){
         return Paths.get( outputDirectory.toString()+"\\" +examTitle);
     }
 
@@ -147,7 +149,6 @@ public class ServerLogic {
         }
         return result;
     }
-
     public  List<Photo> getAllPhotos() {
         return allPhotos;
     }

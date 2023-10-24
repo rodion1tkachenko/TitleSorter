@@ -1,5 +1,7 @@
 package util;
 
+import exception.KeyIsNullException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -12,11 +14,14 @@ public class PropertiesUtil {
     private PropertiesUtil(){
     }
     public static String get(String key){
+        if(key==null){
+            throw new KeyIsNullException();
+        }
         return PROPERTIES.getProperty(key);
     }
-    public static Properties getINSTANCE() {
-        return PROPERTIES;
-    }
+//    public static Properties getINSTANCE() {
+//        return PROPERTIES;
+//    }
     private static void loadProperties() {
         try (InputStream resourceAsStream = PropertiesUtil.class.getClassLoader().
                 getResourceAsStream("application.properties")) {

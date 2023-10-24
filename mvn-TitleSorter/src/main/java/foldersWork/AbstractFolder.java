@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public abstract class AbstractFolder {
+
     Path path;
     Scanner scanner=new Scanner(System.in);
 

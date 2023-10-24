@@ -1,5 +1,7 @@
 package entity;
 
+import lombok.AllArgsConstructor;
+
 import java.nio.file.Path;
 import java.util.List;
 
@@ -8,6 +10,9 @@ public class Photo {
     private String fileName;
     private int variant;
     private List<Integer>taskNumbers;
+    public static Photo of(Path absolutePath, String fullPath, int variant, List<Integer> taskNumbers) {
+        return new Photo(absolutePath,fullPath,variant,taskNumbers);
+    }
 
     @Override
     public String toString() {

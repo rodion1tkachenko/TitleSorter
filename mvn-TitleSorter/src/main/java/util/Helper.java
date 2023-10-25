@@ -19,15 +19,15 @@ public class Helper {
         }
         int lastNumber = 0;
         for (int i = 0; i < photos.size(); i++) {
-            for (int j = 0; j < photos.get(i).getTaskNumbers().size(); j++) {
-                if (photos.get(i).getTaskNumbers().get(j) > lastNumber) {
-                    lastNumber = photos.get(i).getTaskNumbers().get(j);
+            for (int j = 0; j < photos.get(i).getSolvedNumbers().size(); j++) {
+                if (photos.get(i).getSolvedNumbers().get(j) > lastNumber) {
+                    lastNumber = photos.get(i).getSolvedNumbers().get(j);
                 }
             }
         }
         return lastNumber;
     }
-    public static int findOutAmountOfVariants(List<Photo> photos) {
+    public static int findAmountOfVariants(List<Photo> photos) {
         if (photos == null) {
             throw new ListOfPhotosIsNullException();
         }
@@ -52,5 +52,8 @@ public class Helper {
             throw new FileHasNoExtensionException();
         }
         return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+    public static String createTableNameWithoutSpaces(String title){
+        return title.replaceAll("[ -]","_");
     }
 }

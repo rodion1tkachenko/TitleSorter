@@ -22,11 +22,11 @@ public class Statistic {
             throw new PathIsNullException();
         }
         HashMap<Integer, HashSet<Integer>> map = new HashMap<>();
-        for (int i = 0; i < Helper.findOutAmountOfVariants(photoList); i++) {
+        for (int i = 0; i < Helper.findAmountOfVariants(photoList); i++) {
             map.put(i + 1, new HashSet<>());
         }
         for (Photo photo : photoList) {
-            map.get(photo.getVariant()).addAll(photo.getTaskNumbers());
+            map.get(photo.getVariant()).addAll(photo.getSolvedNumbers());
         }
         System.out.println(map);
 //        getLuckyVariants(map, path);

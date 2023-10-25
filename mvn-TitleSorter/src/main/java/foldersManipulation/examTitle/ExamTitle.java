@@ -1,18 +1,24 @@
-package foldersWork;
+package foldersManipulation.examTitle;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.SQLOutput;
+import foldersManipulation.examTitle.ExamTitleImp;
+
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class ExamName extends AbstractFolder {
+public class ExamTitle implements ExamTitleImp {
+    private String title;
 
-    @Override
-    public Path getDirectory() {
+    public String getTitle() {
+        return title;
+    }
+
+    public ExamTitle() {
+        enterTitle();
+    }
+
+    private void enterTitle() {
+        Scanner scanner=new Scanner(System.in);
         System.out.print("Enter exam's name -> ");
-
-
         boolean isNameFound=false;
         while(!isNameFound){
             if (scanner.hasNextLine()) {
@@ -25,12 +31,11 @@ public class ExamName extends AbstractFolder {
                     System.out.print("You entered name with Cyrillic symbols. Please try again -> ");
                 }
                 else {
-                    path = Paths.get(inputString);
+                    title=inputString;
                     isNameFound=true;
                 }
 
             }
         }
-        return path;
     }
 }

@@ -72,26 +72,26 @@ class HelperTest {
     class FindOutAmountOfVariantsMethodTests{
         @Test
         void maxVariantIsOne(){
-            int amountOfVariants = Helper.findOutAmountOfVariants(List.of(PHOTO_ONE));
+            int amountOfVariants = Helper.findAmountOfVariants(List.of(PHOTO_ONE));
             org.assertj.core.api.Assertions.assertThat(amountOfVariants).isEqualTo(1);
         }
         @Test
         void maxVariantIsTwo(){
-            int amountOfVariants = Helper.findOutAmountOfVariants(List.of(PHOTO_ONE,PHOTO_TWO));
+            int amountOfVariants = Helper.findAmountOfVariants(List.of(PHOTO_ONE,PHOTO_TWO));
             org.assertj.core.api.Assertions.assertThat(amountOfVariants).isEqualTo(2);
         }
         @Test
         void ListOfVariantsIsNull(){
-            assertThrows(ListOfPhotosIsNullException.class,()-> Helper.findOutAmountOfVariants(null));
+            assertThrows(ListOfPhotosIsNullException.class,()-> Helper.findAmountOfVariants(null));
         }
         @Test
         void variantsListHasNegativeVariant(){
-            int amountOfVariants = Helper.findOutAmountOfVariants(List.of(PHOTO_ONE, PHOTO_WITH_NEGATIVE_VALUE));
+            int amountOfVariants = Helper.findAmountOfVariants(List.of(PHOTO_ONE, PHOTO_WITH_NEGATIVE_VALUE));
             org.assertj.core.api.Assertions.assertThat(amountOfVariants).isEqualTo(1);
         }
         @Test
         void ListOfVariantsIsEmpty(){
-            assertThrows(ListOfPhotoIsEmptyException.class,()->Helper.findOutAmountOfVariants(List.of()));
+            assertThrows(ListOfPhotoIsEmptyException.class,()->Helper.findAmountOfVariants(List.of()));
         }
 
     }

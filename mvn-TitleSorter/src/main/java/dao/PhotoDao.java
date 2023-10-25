@@ -1,5 +1,6 @@
 package dao;
 
+import entity.DatabaseData;
 import entity.Photo;
 import util.ConnectionManager;
 
@@ -7,8 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 
-public class PhotoDao {
+public class PhotoDao implements Dao {
    private PhotoDao() {
 
    }
@@ -33,28 +36,29 @@ public class PhotoDao {
       select from photos
       where filename=?
 """;
-   public void checkConnection(){
+//   public void checkConnection(){
+//      try (Connection connection = ConnectionManager.get();
+//           PreparedStatement statement = connection.prepareStatement(PRINT_ALL_PHOTO_FIELDS_SQL)) {
+//         ResultSet resultSet = statement.executeQuery();
+//         while(resultSet.next()){
+//            System.out.print("id: "+resultSet.getString("id")+" ");
+//            System.out.print("variant : "+resultSet.getString("variant")+" ");
+//            System.out.print("fileName : "+resultSet.getString("fileName")+" ");
+//            System.out.println("numbers: "+resultSet.getString("numbers")+" ");
+//         }
+//      } catch (SQLException e) {
+//          throw new RuntimeException(e);
+//      }
+//   }
 
+   public void save(DatabaseData databaseData){
       try (Connection connection = ConnectionManager.get();
-           PreparedStatement statement = connection.prepareStatement(PRINT_ALL_PHOTO_FIELDS_SQL)) {
-         ResultSet resultSet = statement.executeQuery();
-         while(resultSet.next()){
-            System.out.print("id: "+resultSet.getString("id")+" ");
-            System.out.print("variant : "+resultSet.getString("variant")+" ");
-            System.out.print("fileName : "+resultSet.getString("fileName")+" ");
-            System.out.println("numbers: "+resultSet.getString("numbers")+" ");
-         }
-      } catch (SQLException e) {
-          throw new RuntimeException(e);
-      }
-   }
-   public void save(Photo photo,String tableTitle){
-      try (Connection connection = ConnectionManager.get();
-           PreparedStatement preparedStatement= connection.prepareStatement(SAVE_SQL.formatted(tableTitle))) {
-         setData(photo, preparedStatement);
+           PreparedStatement preparedStatement = connection
+                   .prepareStatement(SAVE_SQL.formatted(databaseData.getTableTitle()))) {
+         setData(databaseData.getPhoto(), preparedStatement);
          preparedStatement.executeUpdate();
       } catch (SQLException e) {
-          throw new RuntimeException(e);
+         throw new RuntimeException(e);
       }
    }
    public  final void delete(Integer id){
@@ -69,8 +73,8 @@ public class PhotoDao {
 
    private  void setData(Photo photo, PreparedStatement preparedStatement) throws SQLException {
       preparedStatement.setInt(1, photo.getVariant());
-      preparedStatement.setString(2, photo.getTaskNumbers().toString()
-              .substring(1, photo.getTaskNumbers().toString().length() - 1));
+      preparedStatement.setString(2, photo.getSolvedNumbers().toString()
+              .substring(1, photo.getSolvedNumbers().toString().length() - 1));
       preparedStatement.setString(3, photo.getFileName());
    }
    private boolean isContain(Photo photo){
@@ -89,4 +93,28 @@ public class PhotoDao {
       }
    }
 
+   @Override
+   public List findAll() {
+      return null;
+   }
+
+   @Override
+   public Optional findById(Object id) {
+      return Optional.empty();
+   }
+
+   @Override
+   public boolean delete(Object id) {
+      return false;
+   }
+
+   @Override
+   public void update(Object entity) {
+
+   }
+
+   @Override
+   public Object save(Object entity) {
+      return null;
+   }
 }

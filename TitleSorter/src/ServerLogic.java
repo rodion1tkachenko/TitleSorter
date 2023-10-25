@@ -1,5 +1,5 @@
-import foldersWork.InputFolder;
-import foldersWork.OutputFolder;
+import foldersManipulation.InputFolder;
+import foldersManipulation.OutputFolder;
 
 import java.io.File;
 import java.io.IOException;

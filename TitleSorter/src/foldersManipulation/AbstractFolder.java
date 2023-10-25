@@ -1,4 +1,4 @@
-package foldersWork;
+package foldersManipulation;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

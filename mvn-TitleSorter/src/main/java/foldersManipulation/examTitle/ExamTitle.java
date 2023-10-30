@@ -16,6 +16,10 @@ public class ExamTitle implements ExamTitleImp {
         enterTitle();
     }
 
+    public ExamTitle(String title) {
+        this.title = title;
+    }
+
     private void enterTitle() {
         Scanner scanner=new Scanner(System.in);
         System.out.print("Enter exam's name -> ");

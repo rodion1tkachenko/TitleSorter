@@ -3,6 +3,8 @@ package foldersManipulation.folderInformation;
 import foldersManipulation.inputFolder.InputFolder;
 import foldersManipulation.outputFolder.OutputFolder;
 import foldersManipulation.examTitle.ExamTitle;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.nio.file.Path;
 
@@ -11,6 +13,18 @@ public class FolderInformation implements FolderInformationImp {
     private InputFolder inputFolder;
     private OutputFolder outputFolder;
     private ExamTitle examTitle;
+
+    public void setInputFolder(InputFolder inputFolder) {
+        this.inputFolder = inputFolder;
+    }
+
+    public void setOutputFolder(OutputFolder outputFolder) {
+        this.outputFolder = outputFolder;
+    }
+
+    public void setExamTitle(ExamTitle examTitle) {
+        this.examTitle = examTitle;
+    }
 
     public Path getInputPath(){
         return inputFolder.getPath();

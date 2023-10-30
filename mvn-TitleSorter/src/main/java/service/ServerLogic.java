@@ -17,17 +17,18 @@ import util.TableAction;
 public class ServerLogic {
     private List<Photo>allPhotos;
     private FolderInformationImp folderInformation;
-    FolderChecker folderChecker;
+    private FolderChecker folderChecker;
+    private DirectoryMakerImp directoryMaker;
 
     public ServerLogic() {
         allPhotos=new ArrayList<>();
         folderInformation=new FolderInformation();
+        directoryMaker=new DirectoryMaker();
     }
 
     public void run(){
 //        scanPhotos();(1 step)
         allPhotos=folderChecker.scanPhotos();
-
 //        savePhotoAtDatabase();
         TableAction.INSTANCE.savePhotosAtDatabase(allPhotos, folderInformation.getTitle());
 

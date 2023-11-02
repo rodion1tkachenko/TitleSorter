@@ -13,48 +13,60 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class DirectoryMaker implements DirectoryMakerImp {
-    public void sendToTheDesiredFolders(MakingDirectoryData data){
-        makeDirectories(data);
-        moveFiles();
+//    private void makeDirectories(MakingDirectoryData data,int i){
+//        Path path = tryToCreateExamDirectory(data.getFolderInformation());
+//        for (int i = 0; i < Helper.findAmountOfVariants(data.getPhotoList()); i++) {
+//            try {
+//                String dirFullName= path +"\\Вариант "+(i+1);
+//                if(!new File(dirFullName).exists()) {
+//                    Files.createDirectory(Paths.get(dirFullName));
+//                }
+//                for (int j = 0; j < Helper.findOutAmountOfNumbers(data.getPhotoList()); j++) {
+//                    if(!new File(dirFullName+"\\Номер "+(j+1)).exists()) {
+//                        Files.createDirectory(Paths.get(dirFullName + "\\Номер " + (j + 1)));
+//                    }
+//                }
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+    public void makeDirectories(MakingDirectoryData data){
+        makeVariantDirectories(data);
+//        makeTaskDirectories();
+//        Path path = tryToCreateExamDirectory(data.getFolderInformation());
+//        for (int i = 0; i < Helper.findAmountOfVariants(data.getPhotoList()); i++) {
+//            try {
+//                String dirFullName= path +"\\Вариант "+(i+1);
+//                if(!new File(dirFullName).exists()) {
+//                    Files.createDirectory(Paths.get(dirFullName));
+//                }
+//                for (int j = 0; j < Helper.findOutAmountOfNumbers(data.getPhotoList()); j++) {
+//                    if(!new File(dirFullName+"\\Номер "+(j+1)).exists()) {
+//                        Files.createDirectory(Paths.get(dirFullName + "\\Номер " + (j + 1)));
+//                    }
+//                }
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
     }
-    private void makeDirectories(MakingDirectoryData data){
-        Path path = tryToCreateExamDirectory(data.getFolderInformation());
+    //original
+    private void makeVariantDirectories(MakingDirectoryData data) {
         for (int i = 0; i < Helper.findAmountOfVariants(data.getPhotoList()); i++) {
             try {
-                String dirFullName= path +"\\Вариант "+(i+1);
-                if(!new File(dirFullName).exists()) {
-                    Files.createDirectory(Paths.get(dirFullName));
+                Path pathWithVariant = Path.of( data.getPath() +"\\Вариант "+(i+1));
+                if(!new File(pathWithVariant.toString()).exists()) {
+                    Files.createDirectory(pathWithVariant);
                 }
-                for (int j = 0; j < Helper.findOutAmountOfNumbers(data.getPhotoList()); j++) {
-                    if(!new File(dirFullName+"\\Номер "+(j+1)).exists()) {
-                        Files.createDirectory(Paths.get(dirFullName + "\\Номер " + (j + 1)));
-                    }
-                }
+                makeTaskDirectories(pathWithVariant,
+                        Helper.findOutAmountOfNumbers(data.getPhotoList()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
     }
-    private void makeDirectories(){
-        makeVariantDirectories();
-        makeTaskDirectories();
-        Path path = tryToCreateExamDirectory(data.getFolderInformation());
-        for (int i = 0; i < Helper.findAmountOfVariants(data.getPhotoList()); i++) {
-            try {
-                String dirFullName= path +"\\Вариант "+(i+1);
-                if(!new File(dirFullName).exists()) {
-                    Files.createDirectory(Paths.get(dirFullName));
-                }
-                for (int j = 0; j < Helper.findOutAmountOfNumbers(data.getPhotoList()); j++) {
-                    if(!new File(dirFullName+"\\Номер "+(j+1)).exists()) {
-                        Files.createDirectory(Paths.get(dirFullName + "\\Номер " + (j + 1)));
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+
 
     private void makeTaskDirectories(Path path,int taskAmount) throws IOException {
         for (int j = 0; j < taskAmount; j++) {
@@ -64,54 +76,20 @@ public class DirectoryMaker implements DirectoryMakerImp {
         }
     }
 
-    private void makeVariantDirectories(MakingDirectoryData data,Path path) {
-        for (int i = 0; i < Helper.findAmountOfVariants(data.getPhotoList()); i++) {
-            try {
-                Path pathWithVariant = Path.of( path +"\\Вариант "+(i+1));
-                if(!new File(pathWithVariant.toString()).exists()) {
-                    Files.createDirectory(pathWithVariant);
-                }
-                makeTaskDirectories(pathWithVariant,
-                Helper.findOutAmountOfNumbers(data.getPhotoList()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
-    private Path tryToCreateExamDirectory(FolderInformationImp folderInformation) {
-        Path path=makeDirWithExamName(folderInformation);
-        try {
-            Files.createDirectory(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return path;
-    }
-    private Path makeDirWithExamName(FolderInformationImp folderInformation){
-        return Paths.get(folderInformation.getOutputPath().toString()
-                +"\\" +folderInformation.getTitle());
-    }
+//    private Path tryToCreateExamDirectory(FolderInformationImp folderInformation) {
+//        Path path=makeDirWithExamName(folderInformation);
+//        try {
+//            Files.createDirectory(path);
+//        } catch (IOException e) {
+//            System.out.println("directory "+path +"  creation error");
+//            throw new RuntimeException(e);
+//        }
+//        return path;
+//    }
 
-    private void moveFiles(){
-        try {
-            for(Photo photo: getAllPhotos()){
-                for(int number: photo.getSolvedNumbers()){
-                    Files.copy(photo.getAbsolutePath(),makeNewPath(photo, number));
-                }
-            }
-        } catch (IOException e) {
-            e.getStackTrace();
-        }
-    }
 
-    private Path makeNewPath(Photo photo, int number){
-        StringBuilder builder=new StringBuilder(makeDirWithExamName().toString());
-        builder.append("\\Вариант ");
-        builder.append(photo.getVariant());
-        builder.append("\\Номер ");
-        builder.append(number);
-        builder.append(("\\"+photo.getFileName()));
-        return Paths.get( builder.toString());
-    }
+
+
+
 }

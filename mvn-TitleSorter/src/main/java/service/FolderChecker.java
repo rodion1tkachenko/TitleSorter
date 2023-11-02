@@ -6,6 +6,7 @@ import util.Helper;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,15 @@ import java.util.List;
 public class FolderChecker {
     private VariantChecker variantChecker;
     private TasksChecker tasksChecker;
-    public List<Photo> scanPhotos(){
-        File[]files= Paths.get("dummmy").toFile().listFiles();
+
+    public FolderChecker() {
+        variantChecker=new VariantChecker();
+        tasksChecker=new TasksChecker();
+
+    }
+
+    public List<Photo> scanPhotos(Path inputPath){
+        File[]files=inputPath.toFile().listFiles();
         List<Photo>photos=new ArrayList<>();
         for(File oneFile:files) {
             if (Files.isDirectory(oneFile.toPath())) {

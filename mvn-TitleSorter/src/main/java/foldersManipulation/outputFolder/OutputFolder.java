@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class OutputFolder extends ParentFolder implements OutputFolderImp {
 
     public OutputFolder() {
-        path=enterPath();
+
     }
 
     public Path enterPath() {
@@ -29,7 +29,6 @@ public class OutputFolder extends ParentFolder implements OutputFolderImp {
             scanner.close();
 
         }
-
         return null;
     }
 

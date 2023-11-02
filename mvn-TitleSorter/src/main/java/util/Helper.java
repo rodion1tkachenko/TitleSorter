@@ -53,7 +53,7 @@ public class Helper {
         }
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
-    public static String createTableNameWithoutSpaces(String title){
+    public static String getNameWithoutSpaces(String title){
         return title.replaceAll("[ -]","_");
     }
 }

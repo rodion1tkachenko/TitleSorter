@@ -4,8 +4,12 @@ import entity.MakingDirectoryData;
 import entity.Photo;
 import foldersManipulation.folderInformation.FolderInformation;
 import foldersManipulation.folderInformation.FolderInformationImp;
+import util.Statistic;
+import util.TableAction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class ServerLogic {
@@ -24,17 +28,25 @@ public class ServerLogic {
     }
 
     public void run(){
-//        scanPhotos();(1 step)
-        allPhotos=folderChecker.scanPhotos(folderInformation.getInputPath());
-//        savePhotoAtDatabase();
+        getPhotosFromInputFolder();
+        savePhotosAtDatabase();
         makeDirectories();
         movePhotos();
+        writeStatisticInFile();
+    }
 
-//        TableActSTANCE.savePhotosAtDatabase(allPhotos, folderInformation.getTitle());ion.IN
+    private void savePhotosAtDatabase() {
+        TableAction.INSTANCE.savePhotosAtDatabase(allPhotos,folderInformation.getTitle());
+    }
 
-//        HashMap<Integer, HashSet<Integer>> statistic = Statistic.getStatistic(allPhotos, outputDirectory);
-//        Statistic.getLuckyVariants(statistic,outputDirectory);
-//        Statistic.getUnluckyVariants(statistic,outputDirectory);
+    private void getPhotosFromInputFolder() {
+        allPhotos=folderChecker.scanPhotos(folderInformation.getInputPath());
+    }
+
+    private void writeStatisticInFile() {
+        HashMap<Integer, HashSet<Integer>> statistic = Statistic.getStatistic(allPhotos, folderInformation.getOutputPath());
+        Statistic.getLuckyVariants(statistic,folderInformation.getOutputPath());
+        Statistic.getUnluckyVariants(statistic,folderInformation.getOutputPath());
     }
 
     private void movePhotos() {
@@ -48,7 +60,4 @@ public class ServerLogic {
         );
     }
 
-    public  List<Photo> getAllPhotos() {
-        return allPhotos;
-    }
 }

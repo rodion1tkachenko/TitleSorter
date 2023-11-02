@@ -5,7 +5,6 @@ import entity.DatabaseData;
 import entity.Photo;
 import exception.NotValidTableNameException;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -59,7 +58,7 @@ public class TableAction {
 //    }
 
     public void savePhotosAtDatabase(List<Photo> allPhotos, String title) {
-        String newTitle=Helper.createTableNameWithoutSpaces(title);
+        String newTitle=Helper.getNameWithoutSpaces(title);
         INSTANCE.create(newTitle);
         PhotoDao photoDao = PhotoDao.getInstance();
         for(Photo photo: allPhotos){

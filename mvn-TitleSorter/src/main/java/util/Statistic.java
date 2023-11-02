@@ -29,8 +29,6 @@ public class Statistic {
             map.get(photo.getVariant()).addAll(photo.getSolvedNumbers());
         }
         System.out.println(map);
-//        getLuckyVariants(map, path);
-//        getUnluckyVariants(map, path);
         return map;
     }
 

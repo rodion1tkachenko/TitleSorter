@@ -61,7 +61,7 @@ public class PhotoDao implements Dao {
          throw new RuntimeException(e);
       }
    }
-   public  final void delete(Integer id){
+   public  void delete(Integer id){
       try (Connection connection = ConnectionManager.get();
            PreparedStatement preparedStatement= connection.prepareStatement(DELETE_SQL)) {
          preparedStatement.setInt(1,id);
@@ -71,7 +71,7 @@ public class PhotoDao implements Dao {
       }
    }
 
-   private  void setData(Photo photo, PreparedStatement preparedStatement) throws SQLException {
+   private void setData(Photo photo, PreparedStatement preparedStatement) throws SQLException {
       preparedStatement.setInt(1, photo.getVariant());
       preparedStatement.setString(2, photo.getSolvedNumbers().toString()
               .substring(1, photo.getSolvedNumbers().toString().length() - 1));
